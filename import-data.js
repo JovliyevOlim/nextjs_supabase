@@ -1,15 +1,18 @@
 import {createClient} from '@supabase/supabase-js';
 import fs from 'fs';
+import dotenv from 'dotenv';
 
-const supabaseUrl = "https://xrsbwonctwaoidtzhvcm.supabase.co"
-const supabaseAnonKey = 'sb_publishable_wAlSj3ki1SlZzqiC5tYawQ_DjQoKpvg'
 
-if (!supabaseUrl || !supabaseAnonKey) {
+dotenv.config({path: '.env'});
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceRoleKey) {
     console.error("Xato: .env faylida Supabase kalitlari topilmadi!");
     process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 async function importData() {
     try {
