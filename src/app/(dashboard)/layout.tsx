@@ -1,58 +1,56 @@
-'use client';
-
-import {useEffect, useState} from 'react';
-import {supabase} from '@/lib/supabase';
-import {useRouter, usePathname} from 'next/navigation';
 import Link from 'next/link';
+import {redirect} from 'next/navigation';
 import {LogOut} from 'lucide-react';
+import {createClient} from '@/lib/server';
 
-export default function DashboardLayout({children}: { children: React.ReactNode }) {
-    const router = useRouter();
-    const pathname = usePathname();
-    const [loading, setLoading] = useState(true);
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = await createClient();
+  const {
+    data: {user},
+  } = await supabase.auth.getUser();
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const {data: {session}} = await supabase.auth.getSession();
-            if (!session) {
-                router.push('/login');
-            } else {
-                setLoading(false);
-            }
-        };
-        checkUser();
-    }, [router]);
+  if (!user) {
+    redirect('/login');
+  }
 
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push('/login');
-        router.refresh();
-    };
+  const logout = async () => {
+    'use server';
 
-    if (loading) return <div className="p-10 text-center">Yuklanmoqda...</div>;
+    const serverClient = await createClient();
+    await serverClient.auth.signOut();
+    redirect('/login');
+  };
 
-    return (
-        <div className="min-h-screen bg-white">
-            <header className="h-16 border-b border-gray-100 flex items-center bg-white sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto w-full px-6 flex justify-between items-center">
-                    <div className="flex items-center gap-8">
-                        <nav className="flex gap-6 text-sm font-semibold">
-                            <Link href="/invoices"
-                                  className={pathname === '/invoices' ? 'text-blue-600' : 'text-gray-400'}>Invoices</Link>
-                            <Link href="/orders"
-                                  className={pathname === '/orders' ? 'text-blue-600' : 'text-gray-400'}>Orders</Link>
-                        </nav>
-                    </div>
-                    <button onClick={handleLogout}
-                            className="flex items-center gap-2 text-red-500 text-sm font-bold hover:bg-red-50 px-3 py-1.5 rounded-lg">
-                        <LogOut size={16}/> Logout
-                    </button>
-                </div>
-            </header>
+  return (
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 z-50 flex h-16 items-center border-b border-gray-100 bg-white">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6">
+          <nav className="flex gap-6 text-sm font-semibold">
+            <Link href="/invoices" className="text-gray-700 hover:text-blue-600">
+              Invoices
+            </Link>
+            <Link href="/orders" className="text-gray-700 hover:text-blue-600">
+              Orders
+            </Link>
+          </nav>
 
-            <main className="max-w-7xl mx-auto p-6">
-                {children}
-            </main>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-bold text-red-500 hover:bg-red-50"
+            >
+              <LogOut size={16}/>
+              Logout
+            </button>
+          </form>
         </div>
-    );
+      </header>
+
+      <main className="mx-auto max-w-7xl p-6">{children}</main>
+    </div>
+  );
 }

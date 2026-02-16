@@ -1,61 +1,53 @@
-## 🚀 Loyihani ishga tushirish (Step-by-Step)
+## Run The Project (Step-by-Step)
 
-Loyihani yangi (fresh) Supabase loyihasida ishga tushirish uchun quyidagi ketma-ketlikka amal qiling:
+Follow this sequence to run the project with a fresh Supabase instance.
 
-## 1. Supabase loyihasini tayyorlash
+## 1. Create a Supabase project
 
-      Supabase Dashboard orqali yangi loyiha oching.
+Create a new project in the Supabase dashboard and copy these values:
 
-Loyihaning URL, Anon Key va Service Role Key ma'lumotlarini nusxalab oling.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-## 2. Muhit o'zgaruvchilarini sozlash
+## 2. Configure environment variables
 
-Loyiha ildiz papkasida .env faylidagi ma'lumotlarni o'zingizniki bilan almashtiring:
+In the project root, create or update `.env`:
 
-NEXT_PUBLIC_SUPABASE_URL=https://sizning-loyiha-id.supabase.co
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
 
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sizning-anon-public-key
-
-SUPABASE_SERVICE_ROLE_KEY=sizning-service-role-key # Ma'lumotlarni import qilish uchun shart
-
-## 3. Kutubxonalarni o'rnatish
-
-Terminalda quyidagi buyruqni bering:
+## 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-## 4. Ma'lumotlar bazasini sozlash (Yagona buyruq)
-
-Jadvallarni yaratish va JSON ma'lumotlarni bazaga yuklash uchun quyidagi avtomatlashtirilgan buyruqni bering:
+## 4. Initialize database and seed data
 
 ```bash
 npm run db:setup
 ```
 
-Bu buyruq ketma-ket ikkita ishni bajaradi:
+This runs:
 
-db:push: supabase/migrations ichidagi SQL fayllar orqali jadvallar va RLS qoidalarini bazada quradi.
+- `db:push`: applies SQL migrations from `supabase/migrations`
+- `db:seed`: loads sample data from `src/data/*.json`
 
-db:seed: import-data.js skriptini ishga tushirib, ./src/data/*.json fayllaridagi ma'lumotlarni bazaga yuklaydi.
-
-## 5. Loyihani yurgizish
-
-Barcha sozlamalar tugagach, loyihani mahalliy serverda ishga tushiring:
+## 5. Start the app
 
 ```bash
 npm run dev
 ```
 
-Endi brauzerda http://localhost:3000 manziliga kiring.
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📂 Loyiha tuzilishi
+## Project Structure
 
-supabase/migrations/ — Bazani noldan qurish uchun SQL skriptlar.
-
-src/data/ — Loyiha uchun test JSON ma'lumotlari.
-
-src/components/grid/ — Asosiy AGGridTable komponenti.
-
-import-data.js — Ma'lumotlarni bazaga yuklovchi avtomatlashtirilgan script.
+- `supabase/migrations/`: SQL migrations
+- `src/data/`: sample JSON data
+- `src/components/grid/`: AG Grid component
+- `import-data.js`: seed script for JSON imports
