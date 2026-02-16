@@ -1,6 +1,7 @@
 'use client';
 
 import Modal from '@/components/ui/Modal';
+import {Loader2} from 'lucide-react';
 
 interface TextInputDialogProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface TextInputDialogProps {
   value: string;
   confirmLabel: string;
   cancelLabel?: string;
+  isLoading?: boolean;
   onChange: (value: string) => void;
   onConfirm: () => void;
   onClose: () => void;
@@ -23,6 +25,7 @@ export default function TextInputDialog({
   value,
   confirmLabel,
   cancelLabel = 'Cancel',
+  isLoading = false,
   onChange,
   onConfirm,
   onClose,
@@ -37,6 +40,7 @@ export default function TextInputDialog({
         type="text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        disabled={isLoading}
         className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder={placeholder}
       />
@@ -44,6 +48,7 @@ export default function TextInputDialog({
         <button
           type="button"
           onClick={onClose}
+          disabled={isLoading}
           className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
         >
           {cancelLabel}
@@ -51,8 +56,10 @@ export default function TextInputDialog({
         <button
           type="button"
           onClick={onConfirm}
-          className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
+          disabled={isLoading}
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 disabled:opacity-60"
         >
+          {isLoading && <Loader2 size={14} className="animate-spin"/>}
           {confirmLabel}
         </button>
       </div>

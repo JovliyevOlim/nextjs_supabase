@@ -393,6 +393,7 @@ export default function AGGridTable<T extends object>({
         placeholder="e.g. Finance Team View"
         value={newViewName}
         confirmLabel="Create"
+        isLoading={loading}
         onChange={setNewViewName}
         onConfirm={() => void saveNewView()}
         onClose={() => setCreateModalOpen(false)}
@@ -403,6 +404,7 @@ export default function AGGridTable<T extends object>({
         title="Delete View"
         description="Are you sure you want to delete this saved view?"
         confirmLabel="Delete"
+        isLoading={loading}
         onConfirm={() => void deleteView()}
         onClose={() => setDeleteModalOpen(false)}
       />

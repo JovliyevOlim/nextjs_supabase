@@ -24,8 +24,6 @@ export const invoiceColumns: ColDef<InvoiceRecord>[] = [
     field: 'invoice_id',
     headerName: 'Invoice ID',
     filter: 'agTextColumnFilter',
-    checkboxSelection: true,
-    headerCheckboxSelection: true,
   },
   {
     field: 'customer_name',
